@@ -22,13 +22,6 @@ let persons = [
 
 app.use(bodyParser.json())
 
-const generateId = () => {
-    const maxId = notes.length > 0
-      ? Math.max(...notes.map(n => n.id))
-      : 0
-    return maxId + 1
-  }
-
 app.get('/api/persons', (request, response) => {
     response.json(persons)
   })
@@ -52,35 +45,36 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
-app.post('/notes', (request, response) => {
-  const body = request.body
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  persons = persons.filter(person => person.id !== id)
 
-  if (!body.content) {
+  response.status(204).end()
+})
+
+app.post('/api/persons', (request, response) => {
+  const body = request.body
+  console.log(body);
+  console.log(body.content);
+
+  if ((Object.keys(request.body).length === 0)) {
     return response.status(400).json({ 
       error: 'content missing' 
     })
   }
  
-  const note = {
-    content: body.content,
-    important: body.important || false,
-    date: new Date(),
-    id: generateId(),
+  const person = {
+    id: Math.floor(Math.random() * (10000 - 1 + 1)) + 1,
+    name: body.name,
+    number: body.number,
   }
 
-  notes = notes.concat(note)
+  persons = persons.concat(person)
 
-  response.json(note)
+  response.json(person)
 })
 
-app.delete('/notes/:id', (request, response) => {
-    const id = Number(request.params.id)
-    notes = notes.filter(note => note.id !== id)
-
-    response.status(204).end()
-})
-
-const PORT = 3003
+const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
