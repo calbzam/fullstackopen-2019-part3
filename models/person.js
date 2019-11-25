@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator');
 
 const url = process.env.MONGODB_URI
 
@@ -22,7 +23,8 @@ mongoose.connect(url, { useNewUrlParser: true })
     number: {
       type: String,
       minlength: 5,
-      required: true
+      required: true,
+      unique: true
     },
   })
 
