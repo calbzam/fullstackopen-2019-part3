@@ -89,7 +89,6 @@ app.post('/api/persons', (request, response, next) => {
     response.json(savedAndFormattedPerson)})
   .catch(error => next(error))
   }) 
-  
 
 // handler of requests with unknown endpoint
 const unknownEndpoint = (request, response) => {
